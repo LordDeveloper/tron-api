@@ -150,7 +150,8 @@ class HttpProvider implements HttpProviderInterface
 
         $options = [
             'headers'   => $this->headers,
-            'body'      => json_encode($payload)
+            'body'      => json_encode($payload),
+            'query'     => http_build_query($payload),
         ];
 
         $request = new Request($method, $url, $options['headers'], $options['body']);
