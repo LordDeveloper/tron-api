@@ -127,6 +127,7 @@ class Tron implements TronInterface
             'solidityNode'  =>  $solidityNode,
             'eventServer'   =>  $eventServer,
             'signServer'    =>  $signServer,
+            'explorer'      => $explorer,
         ]));
 
         $this->transactionBuilder = new TransactionBuilder($this);
@@ -147,8 +148,9 @@ class Tron implements TronInterface
                                 ?HttpProviderInterface $solidityNode = null,
                                 ?HttpProviderInterface $eventServer = null,
                                 ?HttpProviderInterface $signServer = null,
-                                string $privateKey = null) {
-        return new static($fullNode, $solidityNode, $eventServer, $signServer, $privateKey);
+                                ?HttpProviderInterface $explorer = null,
+                                ?string $privateKey = null) {
+        return new static($fullNode, $solidityNode, $eventServer, $signServer, $explorer, $privateKey);
     }
 
     /**
