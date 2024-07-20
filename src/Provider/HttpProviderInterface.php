@@ -29,7 +29,7 @@ interface HttpProviderInterface
      * @param string $method
      * @return array
      */
-    public function request($url, array $payload = [], string $method = 'get'): array;
+    public function request($url, array $payload = [], string $method = 'get'): array|PromiseInterface;
 
     /**
      * We send async requests to the server
