@@ -2,7 +2,12 @@
 
 namespace IEXBase\TronAPI\Provider;
 
-use GuzzleHttp\{Psr7\Request, Client, ClientInterface};
+use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\{
+    Promise\PromiseInterface,
+    Psr7\Request,
+    Client,
+    ClientInterface};
 use Psr\Http\Message\StreamInterface;
 use IEXBase\TronAPI\Exception\{NotFoundException, TronException};
 use IEXBase\TronAPI\Support\Utils;
@@ -137,11 +142,15 @@ class HttpProvider implements HttpProviderInterface
      * @param $url
      * @param array $payload
      * @param string $method
-     * @return array|mixed
+     * @return array|PromiseInterface
      * @throws TronException
      */
-    public function request($url, array $payload = [], string $method = 'get'): array
+    public function request($url, array $payload = [], string $method = 'get'): array|PromiseInterface
     {
+        if (! empty($payload['async'])) {
+            return $this->requestAsync($url, $payload, $method);
+        }
+
         $method = strtoupper($method);
 
         if(!in_array($method, ['GET', 'POST'])) {
@@ -160,6 +169,39 @@ class HttpProvider implements HttpProviderInterface
         return $this->decodeBody(
             $rawResponse->getBody(),
             $rawResponse->getStatusCode()
+        );
+    }
+
+    /**
+     * We send requests to the server
+     *
+     * @param $url
+     * @param array $payload
+     * @param string $method
+     * @return PromiseInterface
+     * @throws TronException
+     */
+    public function requestAsync($url, array $payload = [], string $method = 'get'): PromiseInterface
+    {
+        $method = strtoupper($method);
+
+        if(!in_array($method, ['GET', 'POST'])) {
+            throw new TronException('The method is not defined');
+        }
+
+        $options = [
+            'headers'   => $this->headers,
+            'body'      => json_encode($payload),
+            'query'     => http_build_query($payload),
+        ];
+
+        $request = new Request($method, $url, $options['headers'], $options['body']);
+
+        return $this->httpClient->sendAsync($request, $options)->then(
+            onFulfilled: fn (ResponseInterface $response) => $this->decodeBody(
+                $response->getBody(),
+                $response->getStatusCode()
+            )
         );
     }
 
