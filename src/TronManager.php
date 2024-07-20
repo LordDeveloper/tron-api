@@ -45,6 +45,8 @@ class TronManager
         'explorer'      =>  'api/system/status'
     ];
 
+    protected bool $isAsync = false;
+
     /**
      * @param $tron
      * @param $providers
@@ -155,6 +157,13 @@ class TronManager
         }
 
         return $this->providers['eventServer'];
+    }
+
+    public function setAsync(bool $value)
+    {
+        $this->isAsync = $value;
+
+        return $this;
     }
 
     /**
