@@ -177,6 +177,10 @@ class TronManager
      */
     public function request($url, array $params = [], string $method = 'post')
     {
+        if ($this->isAsync) {
+            $params['async'] = true;
+        }
+
         $split = explode('/', $url);
         if(in_array($split[0], ['walletsolidity', 'walletextension'])) {
             $response = $this->solidityNode()->request($url, $params, $method);
