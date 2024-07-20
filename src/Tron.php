@@ -156,12 +156,16 @@ class Tron implements TronInterface
 
     public function async()
     {
-        return $this->manager->setAsync(true);
+        $this->manager->setAsync(true);
+
+        return $this;
     }
 
     public function sync()
     {
-        return $this->manager->setAsync(false);
+        $this->manager->setAsync(false);
+
+        return $this;
     }
 
     /**
