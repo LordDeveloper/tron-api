@@ -153,6 +153,17 @@ class Tron implements TronInterface
         return new static($fullNode, $solidityNode, $eventServer, $signServer, $explorer, $privateKey);
     }
 
+
+    public function async()
+    {
+        return $this->manager->setAsync(true);
+    }
+
+    public function sync()
+    {
+        return $this->manager->setAsync(false);
+    }
+
     /**
      * Фасад для Laravel
      *
