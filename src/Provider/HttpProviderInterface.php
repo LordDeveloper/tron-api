@@ -3,6 +3,8 @@
 namespace IEXBase\TronAPI\Provider;
 
 
+use GuzzleHttp\Promise\PromiseInterface;
+
 interface HttpProviderInterface
 {
     /**
@@ -28,4 +30,14 @@ interface HttpProviderInterface
      * @return array
      */
     public function request($url, array $payload = [], string $method = 'get'): array;
+
+    /**
+     * We send async requests to the server
+     *
+     * @param string $url
+     * @param array $payload
+     * @param string $method
+     * @return PromiseInterface
+     */
+    public function requestAsync($url, array $payload = [], string $method = 'get'): PromiseInterface;
 }
