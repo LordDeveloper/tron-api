@@ -183,6 +183,8 @@ class HttpProvider implements HttpProviderInterface
      */
     public function requestAsync($url, array $payload = [], string $method = 'get'): PromiseInterface
     {
+        unset($payload['async']);
+        
         $method = strtoupper($method);
 
         if(!in_array($method, ['GET', 'POST'])) {
